@@ -208,7 +208,7 @@ class Utils
       url: allDocsUrl
       type: "POST"
       dataType: "json"
-      contentType: "json"
+      contentType: "application/json"
       data: JSON.stringify
         keys: docList
         user: Tangerine.settings.upUser
@@ -236,6 +236,7 @@ class Utils
           $.ajax
             type : "POST"
             url : bulkDocsUrl
+            contentType: 'text/plain'
             data : compressedData
             error: =>
               alert "Server bulk docs error"
