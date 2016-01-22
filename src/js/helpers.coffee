@@ -202,7 +202,7 @@ class Utils
 
     a = document.createElement("a")
     a.href = Tangerine.settings.get("groupHost")
-    allDocsUrl = "#{a.protocol}//#{a.host}/_cors_bulk_docs/check/#{Tangerine.settings.groupDB}"
+    allDocsUrl = "#{a.protocol}//#{a.host}/decompressor/check/#{Tangerine.settings.groupDB}"
 
     return $.ajax
       url: allDocsUrl
@@ -230,7 +230,7 @@ class Utils
           compressedData = LZString.compressToBase64(JSON.stringify(docs))
           a = document.createElement("a")
           a.href = Tangerine.settings.get("groupHost")
-          bulkDocsUrl = "#{a.protocol}//#{a.host}/_cors_bulk_docs/upload/#{Tangerine.settings.groupDB}"
+          bulkDocsUrl = "#{a.protocol}//#{a.host}/decompressor/upload/#{Tangerine.settings.groupDB}"
 
           $.ajax
             type : "POST"
