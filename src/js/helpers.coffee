@@ -202,14 +202,15 @@ class Utils
 
     a = document.createElement("a")
     a.href = Tangerine.settings.get("groupHost")
-    allDocsUrl = "#{a.protocol}//#{a.host}/decompressor/check/#{Tangerine.settings.groupDB}"
+    allDocsUrl = "#{a.protocol}//#{a.host}/decompressor/check/#{Tangerine.settings.get('groupName')}"
 
     return $.ajax
       url: allDocsUrl
       type: "POST"
       dataType: "json"
-      data:
-        keys: JSON.stringify(docList)
+      contentType: "json"
+      data: JSON.stringify
+        keys: docList
         user: Tangerine.settings.upUser
         pass: Tangerine.settings.upPass
       error: (a) ->
@@ -230,7 +231,7 @@ class Utils
           compressedData = LZString.compressToBase64(JSON.stringify(docs))
           a = document.createElement("a")
           a.href = Tangerine.settings.get("groupHost")
-          bulkDocsUrl = "#{a.protocol}//#{a.host}/decompressor/upload/#{Tangerine.settings.groupDB}"
+          bulkDocsUrl = "#{a.protocol}//#{a.host}/decompressor/upload/#{Tangerine.settings.get('groupName')}"
 
           $.ajax
             type : "POST"
