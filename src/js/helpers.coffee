@@ -247,6 +247,8 @@ class Utils
   @universalUpload: ->
     results = new Results
     results.fetch
+      options:
+        key: "result"
       success: ->
         docList = results.pluck("_id")
         Utils.uploadCompressed(docList)
