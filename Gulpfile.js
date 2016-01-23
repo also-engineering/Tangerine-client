@@ -93,7 +93,7 @@ gulp.task("webserver", function() {
 });
 
 // compile coffeescript into js files
-gulp.task("build:js", function() {
+gulp.task("build:js",["version"], function() {
 
   var c = coffee({bare: true}); // get a coffeescript stream
   c.on("error", function(err) { // on error
@@ -115,7 +115,7 @@ gulp.task("build:js", function() {
 
 
 // Minify Javascript
-gulp.task("minify:js", ["build:js", "version"], function() {
+gulp.task("minify:js", ["build:js"], function() {
 
   return gulp.src(conf.jsGlob)
     .pipe(sourcemaps.init({loadMaps: true})) // pass along old sourcemaps
