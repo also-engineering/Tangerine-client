@@ -7,7 +7,7 @@ class Results extends Backbone.Collection
       key : 'result'
 
   comparator: (model) ->
-    model.get('start_time') || 0
+    model.get('startTime') || 0
 
   # By default include the docs
   fetch: (options) ->

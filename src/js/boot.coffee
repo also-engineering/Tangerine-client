@@ -101,7 +101,7 @@ Tangerine.bootSequence =
                 doc.subtestData.forEach (subtest) ->
                   if subtest.prototype is "id" then result.participantId = subtest.data.participant_id
                   if subtest.prototype is "complete" then result.endTime = subtest.data.end_time
-                result.startTime = doc.start_time
+                result.startTime = doc.startTime
                 emit "result-#{doc.assessmentId}", result
 
             ).toString()
