@@ -57,7 +57,7 @@ class Result extends Backbone.Model
         for variable, value of data
           if variable == key
             if _.isObject(value)
-              return _.compact(((name if state == QuestionRunView.c.CHECKED) for name, state of value))
+              return _.compact(((name if state == QuestionRunView.prototype.c.CHECKED) for name, state of value))
             else
               return value
     return null
