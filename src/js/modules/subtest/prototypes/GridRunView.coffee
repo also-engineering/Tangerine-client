@@ -36,15 +36,14 @@ class GridRunView extends Backbone.View
     $target = $(event.target)
     index = $target.attr('data-index')
 
-    indexIsntBelowLastAttempted = parseInt(index) > parseInt(@lastAttempted)
-    lastAttemptedIsntZero       = parseInt(@lastAttempted) != 0
-    correctionsDisabled         = @dataEntry is false and @parent?.parent?.enableCorrections is false
+    clickPastLastAttempted = parseInt(index) > parseInt(@lastAttempted)
+    lastAttemptedIsntZero  = parseInt(@lastAttempted) != 0
+    correctionsDisabled    = @dataEntry is false and @parent?.parent?.enableCorrections is false
 
-    return if correctionsDisabled && lastAttemptedIsntZero && indexIsntBelowLastAttempted
+    return if correctionsDisabled && lastAttemptedIsntZero && clickPastLastAttempted
 
     @markElement(index)
     @checkAutostop() if @autostop != 0
-
 
   intermediateItemHandler: (event) =>
     @timeIntermediateCaptured = @getTime() - @startTime
@@ -281,7 +280,7 @@ class GridRunView extends Backbone.View
 
     @mode = "mark" if @dataEntry
 
-    @gridOutput = @items.map -> @c.CORRECT
+    @gridOutput = @items.map ( -> @c.CORRECT ), @
     @columns  = parseInt(@model.get("columns")) || 3
 
     @autostop = if @untimed then 0 else (parseInt(@model.get("autostop")) || 0)
