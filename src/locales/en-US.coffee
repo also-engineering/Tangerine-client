@@ -44,8 +44,6 @@ Tangerine.locales["en-US"] =
     "ResultSumView" :
       "button" :
         "resume" : "Resume"
-      "message" :
-        "no_results" : "No results yet!"
 
     "SettingsView" :
       "message" :
