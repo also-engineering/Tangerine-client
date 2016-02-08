@@ -259,6 +259,9 @@ conf.fileOrder = [
 
   'GpsRunView',
 
+  'CaseSearchRunView',
+  'CaseSelectRunView',
+
   'Result',
   'Results',
   'ResultView',
