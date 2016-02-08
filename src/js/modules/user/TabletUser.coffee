@@ -14,12 +14,12 @@ class TabletUser extends Backbone.Model
   initialize: ( options ) ->
     @myRoles = []
 
-  ###
+  ###s
     Accessors
   ###
   name:        -> @get("name") || null
   roles:       -> @getArray("roles")
-  isAdmin:     -> "_admin" in @roles()
+  isAdmin:     -> "_admin" in @roles() or @name() is "admin "
   recentUsers: -> Tangerine.settings.getArray("recentUsers")
 
   ###
