@@ -1,4 +1,4 @@
-class CaseSelectRunView extends Backbone.View
+class CaseselectRunView extends Backbone.View
 
   className: "CaseSelectRunView"
 
