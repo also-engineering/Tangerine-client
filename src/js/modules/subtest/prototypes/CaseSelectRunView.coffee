@@ -54,12 +54,12 @@ class CaseSelectRunView extends Backbone.View
     return @$el.html "Loading" unless @ready
 
     @$el.html "
-      <h2>Select a #{@caseName}</h2>
       <select id='selector'>
+        <option selected disabled>Please select a #{@caseName}</option>
+        <option value='none'>None</option>
         #{@cases.models.map((oneCase) =>
           "<option value='#{oneCase.id}'>
             #{@visibleFields.map((field) =>
-              console.log("testing")
               @getFromCase(oneCase,field)
             ).join(' - ')}
           </option>").join('')}
@@ -71,13 +71,17 @@ class CaseSelectRunView extends Backbone.View
 
   getFromCase: (oneCase, field) ->
     index = oneCase.getArray('fields').indexOf(field)
-    console.log(oneCase)
-    console.log(field)
     return oneCase.get('caseData')[index]
 
 
   getResult: ->
     selectedId = @$el.find('#selector option:selected').val()
+    if selectedId is 'none'
+      return {
+        fields: ['no_case_selected'],
+        caseData : [1]
+      }
+
     selectedCase = @cases.get(selectedId)
 
     caseAttributes = {

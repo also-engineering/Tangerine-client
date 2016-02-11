@@ -198,7 +198,7 @@ class GridRunView extends Backbone.View
             Utils.background ""
         , 1e3) # magic number
 
-        @updateMode event, "last"
+        @updateMode "last"
 
 
     if @captureItemAtTime && !@gotIntermediate && !@minuteMessage && @timeElapsed >= @captureAfterSeconds
@@ -510,7 +510,7 @@ class GridRunView extends Backbone.View
 
       item = @items[@items.length-1]
       if confirm(t("GridRunView.message.last_item_confirm", item:item))
-        @updateMode
+        @updateMode()
         return true
       else
         @messages = if @messages?.push then @messages.concat([msg]) else [msg]

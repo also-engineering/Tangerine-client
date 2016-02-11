@@ -172,7 +172,7 @@ Tangerine.bootSequence =
 
   loadI18n: ( callback ) ->
     i18n.init
-      fallbackLng : false
+      fallbackLng : "en-US"
       lng         : Tangerine.settings.get("language")
       resStore    : Tangerine.locales
     , (err, t) ->
@@ -184,6 +184,7 @@ Tangerine.bootSequence =
     document.addEventListener "deviceready"
       ,
         ->
+          console.log('deviceready')
           document.addEventListener "online",  -> Tangerine.online = true
           document.addEventListener "offline", -> Tangerine.online = false
 
@@ -197,10 +198,14 @@ Tangerine.bootSequence =
           # prevents default
           document.addEventListener "backbutton", Tangerine.onBackButton, false
 
+          # add the event listeners, but don't depend on them calling back
+          callback()
       , false
 
     # add the event listeners, but don't depend on them calling back
-    callback()
+    callback() unless cordova?
+
+
 
   loadSingletons: ( callback ) ->
     # Singletons
