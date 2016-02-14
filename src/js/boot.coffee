@@ -107,8 +107,6 @@ Tangerine.bootSequence =
             ).toString()
       ).then ->
 
-
-
         packNumber = 0
 
         doOne = ->
@@ -184,7 +182,6 @@ Tangerine.bootSequence =
     document.addEventListener "deviceready"
       ,
         ->
-          console.log('deviceready')
           document.addEventListener "online",  -> Tangerine.online = true
           document.addEventListener "offline", -> Tangerine.online = false
 

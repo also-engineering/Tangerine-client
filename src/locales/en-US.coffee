@@ -79,17 +79,17 @@ Tangerine.locales["en-US"] =
         "another" : "Perform another assessment"
 
 
-    "AssessmentMenuView" :
+    "AssessmentsMenuView" :
       "button" :
         "new" : "New"
         "import" : "Import"
         "apk" : "APK"
         "groups" : "Groups"
         "universal_upload" : "Universal Upload"
-        "sync_tablets" : "Sync tablets"
         "results" : "Results"
         "save" : "Save"
         "cancel" : "Cancel"
+        "tablet_manager" : "Tablet manager"
       "label" :
         "assessment" : "Assessment"
         "assessments" : "Assessments"

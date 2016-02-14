@@ -262,6 +262,8 @@ conf.fileOrder = [
   'CaseSearchRunView',
   'CaseSelectRunView',
 
+  'TabletManagerView',
+
   'Result',
   'Results',
   'ResultView',

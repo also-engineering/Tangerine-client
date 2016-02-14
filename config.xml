@@ -9,6 +9,7 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <allow-navigation href="*" />
     <icon src="res/icon.png" />
     <allow-navigation href="tangerinecentral.org" />
     <preference name="xwalkVersion" value="14+" />

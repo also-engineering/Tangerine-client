@@ -14,6 +14,9 @@ class Router extends Backbone.Router
 
     'logs' : 'logs'
 
+    'tablet-manager' : 'tabletManager'
+
+
     # Class
     'class'          : 'klass'
     'class/edit/:id' : 'klassEdit'
@@ -105,6 +108,13 @@ class Router extends Backbone.Router
     Tangerine.user.verify
       isAuthenticated: ->
         view = new GroupsView
+        vm.show view
+
+
+  tabletManager: ->
+    Tangerine.user.verify
+      isAuthenticated: ->
+        view = new TabletManagerView
         vm.show view
 
   #

@@ -372,6 +372,8 @@ class GridRunView extends Backbone.View
 
   render: ->
 
+    window.screen.lockOrientation('landscape')
+
     done = 0
 
     startTimerHTML = "<div class='timer_wrapper'><button class='start_time time'>#{@text.start}</button><div class='timer'>#{@timer}</div></div>"

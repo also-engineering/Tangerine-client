@@ -228,7 +228,7 @@ class Utils
         Tangerine.db.allDocs(include_docs:true,keys:leftToUpload
         ).then( (response) ->
           docs = {"docs":response.rows.map((el)->el.doc)}
-          compressedData = LZString.compressToBase64(JSON.stringify(docs))
+          compressedData = LZString.compressToUint8Array(JSON.stringify(docs))
           a = document.createElement("a")
           a.href = Tangerine.settings.get("groupHost")
           bulkDocsUrl = "#{a.protocol}//#{a.host}/decompressor/upload/#{Tangerine.settings.get('groupName')}"
@@ -236,7 +236,7 @@ class Utils
           $.ajax
             type : "POST"
             url : bulkDocsUrl
-            contentType: 'text/plain'
+            contentType: 'application/octet-stream'
             data : compressedData
             error: =>
               alert "Server bulk docs error"
@@ -244,7 +244,6 @@ class Utils
               Utils.sticky "Results uploaded"
               return
         )
-
 
   @universalUpload: ->
     results = new Results

@@ -21,7 +21,7 @@ class AssessmentRunView extends Backbone.View
     @subtestViews = []
     @model.subtests.sort()
     @model.subtests.each (model) =>
-      @subtestViews.push new SubtestRunView 
+      @subtestViews.push new SubtestRunView
         model  : model
         parent : @
 
@@ -34,7 +34,7 @@ class AssessmentRunView extends Backbone.View
       places = Tangerine.settings.get("sequencePlaces")
       places = {} unless places?
       places[@model.id] = 0 unless places[@model.id]?
-      
+
       if places[@model.id] < sequences.length - 1
         places[@model.id]++
       else
@@ -45,8 +45,8 @@ class AssessmentRunView extends Backbone.View
       @orderMap = sequences[places[@model.id]]
       @orderMap[@orderMap.length] = @subtestViews.length
     else
-      for i in [0..@subtestViews.length]
-        @orderMap[i] = i
+      @orderMap = [0..@subtestViews.length]
+
 
     @result = new Result
       assessmentId   : @model.id
@@ -62,7 +62,7 @@ class AssessmentRunView extends Backbone.View
 
   render: ->
     currentView = @subtestViews[@orderMap[@index]]
-    
+
     if @model.subtests.length == 0
       @$el.html "<h1>Oops...</h1><p>\"#{@model.get 'name'}\" is blank. Perhaps you meant to add some subtests.</p>"
       @trigger "rendered"
@@ -73,7 +73,7 @@ class AssessmentRunView extends Backbone.View
       "
       @$el.find('#progress').progressbar value : ( ( @index + 1 ) / ( @model.subtests.length + 1 ) * 100 )
 
-      currentView.on "rendered",    => @flagRender "subtest"  
+      currentView.on "rendered",    => @flagRender "subtest"
       currentView.on "subRendered", => @trigger "subRendered"
 
       currentView.on "next",    => @step 1
@@ -99,7 +99,7 @@ class AssessmentRunView extends Backbone.View
       view.close()
     @result.clear()
     Tangerine.nav.setStudent ""
-    
+
   abort: ->
     @abortAssessment = true
     @step 1
@@ -117,28 +117,31 @@ class AssessmentRunView extends Backbone.View
         @reset 1
 
   step: (increment) =>
-
+    window.screen?.unlockOrientation?()
     if @abortAssessment
       currentView = @subtestViews[@orderMap[@index]]
       @saveResult( currentView )
-      return 
+      return
 
     currentView = @subtestViews[@orderMap[@index]]
-    if currentView.isValid()
+    subtestValid = currentView.isValid()
+    if subtestValid
       @saveResult( currentView, increment )
     else
       currentView.showErrors()
 
   reset: (increment) =>
+    window.screen?.unlockOrientation?()
     @rendered.subtest = false
     @rendered.assessment = false
     currentView = @subtestViews[@orderMap[@index]]
     currentView.close()
-    @index = 
+    @index =
       if @abortAssessment == true
         @subtestViews.length-1
       else
         @index + increment
+
     @render()
     window.scrollTo 0, 0
 
