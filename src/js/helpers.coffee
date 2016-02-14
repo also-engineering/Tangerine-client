@@ -238,6 +238,7 @@ class Utils
             url : bulkDocsUrl
             contentType: 'application/octet-stream'
             data : compressedData
+            processData: false
             error: =>
               alert "Server bulk docs error"
             success: =>
