@@ -117,8 +117,8 @@ class AssessmentRunView extends Backbone.View
         @reset 1
 
   step: (increment) =>
-    landscape = window.screen.orientation.type is "landscape-primary" or window.screen.orientation.type is "landscape-secondary"
-    if landscape
+    if Tangerine.orientationLocked
+      Tangerine.orientationLocked = false
       window.screen.unlockOrientation?()
     if @abortAssessment
       currentView = @subtestViews[@orderMap[@index]]
@@ -133,8 +133,8 @@ class AssessmentRunView extends Backbone.View
       currentView.showErrors()
 
   reset: (increment) =>
-    landscape = window.screen.orientation.type is "landscape-primary" or window.screen.orientation.type is "landscape-secondary"
-    if landscape
+    if Tangerine.orientationLocked
+      Tangerine.orientationLocked = false
       window.screen.unlockOrientation?()
 
     @rendered.subtest = false
