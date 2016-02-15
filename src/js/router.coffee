@@ -12,6 +12,8 @@ class Router extends Backbone.Router
 
     '' : 'landing'
 
+    'sample' : 'sample'
+
     'logs' : 'logs'
 
     'tablet-manager' : 'tabletManager'
@@ -67,6 +69,12 @@ class Router extends Backbone.Router
     'admin' : 'admin'
 
     'sync/:id'      : 'sync'
+
+  sample: ->
+    Tangerine.user.verify
+      isAuthenticated: ->
+        view = new SampleView
+        vm.show view
 
 
   admin: (options) ->

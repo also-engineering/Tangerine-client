@@ -22,6 +22,7 @@ class AssessmentsMenuView extends Backbone.View
       groups           : t("AssessmentsMenuView.button.groups")
       universal_upload : t("AssessmentsMenuView.button.universal_upload")
       tablet_manager   : t("AssessmentsMenuView.button.tablet_manager")
+      sample_helper   : "Sample helper"
       results          : t("AssessmentsMenuView.button.results")
       save             : t("AssessmentsMenuView.button.save")
       cancel           : t("AssessmentsMenuView.button.cancel")
@@ -53,6 +54,7 @@ class AssessmentsMenuView extends Backbone.View
     tabletManagerButton = "<button class='command tablet-manager'>#{@text.tablet_manager}</button>"
     resultsButton = "<button class='navigation results'>#{@text.results}</button>"
     groupHandle   = "<h2 class='settings grey' data-attribtue='groupHandle'>#{Tangerine.settings.getEscapedString('groupHandle') || Tangerine.settings.get('groupName')}</h2>"
+    sampleButton  = "<a href='#sample'><button class='navigation sample'>#{@text.sample_helper}</button></a>" if Tangerine.settings.get('groupName') is 'search_test'
 
     html = "
       <section>
@@ -63,7 +65,7 @@ class AssessmentsMenuView extends Backbone.View
         <div id='assessments_container'></div>
       </section>
       <br>
-      #{tabletManagerButton}#{uploadButton}
+      #{tabletManagerButton}#{uploadButton}#{sampleButton||''}
 
     "
 

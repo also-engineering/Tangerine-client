@@ -263,6 +263,8 @@ conf.fileOrder = [
   'CaseSelectRunView',
 
   'TabletManagerView',
+  'SampleView',
+
 
   'Result',
   'Results',
@@ -330,6 +332,9 @@ conf.fileOrder = [
   'Config',
 
   'Log',
+
+  'Case',
+  'Cases',
 
   'Settings',
   'SettingsView',
