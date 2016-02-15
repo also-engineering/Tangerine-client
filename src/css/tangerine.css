@@ -449,7 +449,7 @@ table.grid .grid_element {
   width: 95%;
   border: none;
   outline: none;
-  font-family: Gentium, Tahoma, Monaco, sans-serif;
+  font-family: Andika, Gentium, Tahoma, Monaco, sans-serif;
   cursor: pointer;
   text-align: center;
   background: #CCC;
@@ -2283,7 +2283,7 @@ body[rtl] {
   vertical-align: text-top;
 }
 /*
- * Users Menu View 
+ * Users Menu View
  */
 .UsersMenuView input {
   width: 50% !important;
