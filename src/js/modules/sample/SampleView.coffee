@@ -307,7 +307,12 @@ SampleView = Backbone.View.extend
       </select>
       <section id='sample-calculator'></section>
       <div id='sample-instructions'></div>
+    "
 
+    @trigger 'rendered'
+
+    return
+    "
       <section>
         <h1>Verification rule</h1>
 
@@ -349,5 +354,3 @@ SampleView = Backbone.View.extend
       </section>
 
     "
-
-    @trigger 'rendered'
