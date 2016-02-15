@@ -41,7 +41,6 @@ ViewManager.prototype = {
     this.currentView.setElement($("."+this.className));
 
     this.listenTo(this.currentView, "rendered", function(){
-      console.log("rendered triggered")
       // call afterRender function if exists
       if (typeof this.currentView.afterRender === "function") {
         this.currentView.afterRender()

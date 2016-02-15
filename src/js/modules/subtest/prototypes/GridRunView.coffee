@@ -372,7 +372,7 @@ class GridRunView extends Backbone.View
 
   render: ->
 
-    window.screen.lockOrientation('landscape')
+    window.screen.lockOrientation?('landscape')
     Tangerine.orientationLocked = true
 
     done = 0
