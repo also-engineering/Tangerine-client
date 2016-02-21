@@ -36,7 +36,6 @@ class AssessmentListElementView extends Backbone.View
   blankResultCount: "-"
 
   initialize: (options) ->
-    console.log "list element view render"
 
     # arguments
     @model    = options.model
@@ -156,7 +155,6 @@ class AssessmentListElementView extends Backbone.View
 
 
     else
-      console.log "got here"
       @$el.html "
         <div class='non_admin'>
           #{@spriteListLink("span",'run')}#{name} #{@spriteListLink("span",'results')}

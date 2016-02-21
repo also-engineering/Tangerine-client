@@ -2,6 +2,15 @@ class QuestionRunView extends Backbone.View
 
   className: "question"
 
+  c:
+    CHECKED   : "C"
+    UNCHECKED : "U"
+    SKIPPED   : "S"
+    NOT_ASKED : "N"
+    MISSING   : "M"
+    LOGIC_SKIPPED : "L"
+    NOT_ASKED_AUTOSTOP : "A"
+
   events:
     'change input'           : 'update'
     'change textarea'        : 'update'
@@ -16,7 +25,7 @@ class QuestionRunView extends Backbone.View
     @parent    = options.parent
     @dataEntry = options.dataEntry
     @fontFamily = @parent.model.get('fontFamily')
-    @fontStyle = "style=\"font-family: #{@parent.model.get('fontFamily')} !important;\"" if @parent.model.get("fontFamily") != "" 
+    @fontStyle = "style=\"font-family: #{@parent.model.get('fontFamily')} !important;\"" if @parent.model.get("fontFamily") != ""
 
     unless @dataEntry
       @answer = options.answer
@@ -37,7 +46,7 @@ class QuestionRunView extends Backbone.View
     else
       @isValid = false
       @skipped = false
-    
+
     if @notAsked == true
       @isValid = true
       @updateResult()
@@ -77,9 +86,9 @@ class QuestionRunView extends Backbone.View
     if @notAsked == true
       if @type == "multiple"
         for option, i in @options
-          @answer[@options[i].value] = "not_asked"
+          @answer[@options[i].value] = @c.NOT_ASKED
       else
-        @answer = "not_asked"
+        @answer = @c.NOT_ASKED
     else
       if @type == "open"
         @answer = @$el.find("##{@cid}_#{@name}").val()
@@ -96,7 +105,7 @@ class QuestionRunView extends Backbone.View
     if isSkippable or ( isLogicSkipped or isAutostopped )
       # YES, ok, I guess we're valid
       @isValid = true
-      @skipped = if _.isEmptyString(@answer) then true else false
+      @skipped = Boolean(_.isEmptyString(@answer))
     else
       # NO, some kind of validation must occur now
       customValidationCode = @model.get("customValidationCode")
@@ -109,15 +118,14 @@ class QuestionRunView extends Backbone.View
         catch e
           alert "Custom Validation error\n\n#{e}"
       else
-        @isValid = 
+        @isValid =
           switch @type
             when "open"
               if _.isEmptyString(@answer) || (_.isEmpty(@answer) && _.isObject(@answer)) then false else true # don't use isEmpty here
             when "multiple"
-              if ~_.values(@answer).indexOf("checked") then true  else false
+              if ~_.values(@answer).indexOf(@c.CHECKED) then true  else false
             when "single"
               if _.isEmptyString(@answer) || (_.isEmpty(@answer) && _.isObject(@answer)) then false else true
-
 
   setOptions: (options) =>
     @button.options = options
@@ -164,10 +172,7 @@ class QuestionRunView extends Backbone.View
       if @type == "open"
         if _.isString(@answer) && not _.isEmpty(@answer)
           answerValue = @answer
-        if @model.get("multiline")
-          html += "<div><textarea id='#{@cid}_#{@name}' data-cid='#{@cid}' value='#{answerValue || ''}'></textarea></div>"
-        else
-          html += "<div><input id='#{@cid}_#{@name}' data-cid='#{@cid}' value='#{answerValue || ''}'></div>"
+        html += "<div><input id='#{@cid}_#{@name}' data-cid='#{@cid}' value='#{answerValue || ''}'></div>"
 
       else
         html += "<div class='button_container'></div>"
@@ -185,9 +190,9 @@ class QuestionRunView extends Backbone.View
     else
       @$el.hide()
       @trigger "rendered"
-  
+
   defineSpecialCaseResults: ->
-    list = ["missing", "notAsked", "skipped", "logicSkipped", "notAskedAutostop"]
+    list = [@c.MISSING, @c.NOT_ASKED, @c.SKIPPED, @c.LOGIC_SKIPPED, @c.NOT_ASKED_AUTOSTOP]
     for element in list
       if @type == "single" || @type == "open"
         @[element+"Result"] = element
@@ -197,25 +202,3 @@ class QuestionRunView extends Backbone.View
     return
 
 
-class SurveyReviewView extends Backbone.View
-
-  className: "QuestionReviewView"
-
-  initialize: (options) ->
-    @views = options.views
-
-  render: ->
-
-    answers = ("
-      <div class='label_value'>
-        <h3></h3>
-      </div>
-
-    " for view in @views).join("")
-
-    @$el.html "
-
-      <h2>Please review your answers and press next when ready.</h2>
-
-      #{answers}
-    "

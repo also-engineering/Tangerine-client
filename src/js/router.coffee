@@ -14,6 +14,9 @@ class Router extends Backbone.Router
 
     'logs' : 'logs'
 
+    'tablet-manager' : 'tabletManager'
+
+
     # Class
     'class'          : 'klass'
     'class/edit/:id' : 'klassEdit'
@@ -105,6 +108,13 @@ class Router extends Backbone.Router
     Tangerine.user.verify
       isAuthenticated: ->
         view = new GroupsView
+        vm.show view
+
+
+  tabletManager: ->
+    Tangerine.user.verify
+      isAuthenticated: ->
+        view = new TabletManagerView
         vm.show view
 
   #
@@ -408,9 +418,9 @@ class Router extends Backbone.Router
                 view = new AssessmentRunView
                   model: assessment
 
-                if result.has("order_map")
+                if result.has("orderMap")
                   # save the order map of previous randomization
-                  orderMap = result.get("order_map").slice() # clone array
+                  orderMap = result.get("orderMap").slice() # clone array
                   # restore the previous ordermap
                   view.orderMap = orderMap
 

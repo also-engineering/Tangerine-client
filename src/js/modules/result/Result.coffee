@@ -16,9 +16,9 @@ class Result extends Backbone.Model
 
       @set
         'subtestData'       : []
-        'start_time'        : (new Date()).getTime()
+        'startTime'        : (new Date()).getTime()
         'enumerator'        : Tangerine.user.name()
-        'tangerine_version' : Tangerine.version
+        'tangerineVersion' : Tangerine.version
         'device'            : deviceInfo
         'instanceId'        : Tangerine.settings.getString("instanceId")
 
@@ -53,11 +53,14 @@ class Result extends Backbone.Model
       if data.labels?
         for label, i in data.labels
           return data.location[i] if label is key
+      else if data.fields?
+        for field, i in data.fields
+          return data.caseData[i] if field is key
       else
         for variable, value of data
           if variable == key
             if _.isObject(value)
-              return _.compact(((name if state == "checked") for name, state of value))
+              return _.compact(((name if state == QuestionRunView.prototype.c.CHECKED) for name, state of value))
             else
               return value
     return null

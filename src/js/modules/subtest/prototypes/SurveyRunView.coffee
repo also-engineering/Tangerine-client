@@ -218,7 +218,7 @@ class SurveyRunView extends Backbone.View
   isValid: (views = @questionViews) ->
     return true if not views? # if there's nothing to check, it must be good
     views = [views] if not _.isArray(views)
-    views.forEach (qv, i) ->
+    for qv, i in views 
       qv.updateValidity()
       # can we skip it?
       if not qv.model.getBoolean("skippable")
@@ -226,7 +226,7 @@ class SurveyRunView extends Backbone.View
         if not qv.isValid
           # red alert!!
           return false
-    , @
+
     return true
 
 
@@ -234,7 +234,7 @@ class SurveyRunView extends Backbone.View
   getSkipped: ->
     result = {}
     @questionViews.forEach (qv, i) ->
-      result[@questions.models[i].get("name")] = "skipped"
+      result[@questions.models[i].get("name")] = QuestionRunView.prototype.c.SKIPPED
     , @
     return result
 

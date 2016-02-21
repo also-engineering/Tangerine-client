@@ -101,13 +101,11 @@ Tangerine.bootSequence =
                 doc.subtestData.forEach (subtest) ->
                   if subtest.prototype is "id" then result.participantId = subtest.data.participant_id
                   if subtest.prototype is "complete" then result.endTime = subtest.data.end_time
-                result.startTime = doc.start_time
+                result.startTime = doc.startTime
                 emit "result-#{doc.assessmentId}", result
 
             ).toString()
       ).then ->
-
-
 
         packNumber = 0
 
@@ -172,7 +170,7 @@ Tangerine.bootSequence =
 
   loadI18n: ( callback ) ->
     i18n.init
-      fallbackLng : false
+      fallbackLng : "en-US"
       lng         : Tangerine.settings.get("language")
       resStore    : Tangerine.locales
     , (err, t) ->
@@ -197,10 +195,14 @@ Tangerine.bootSequence =
           # prevents default
           document.addEventListener "backbutton", Tangerine.onBackButton, false
 
+          # add the event listeners, but don't depend on them calling back
+          callback()
       , false
 
     # add the event listeners, but don't depend on them calling back
-    callback()
+    callback() unless cordova?
+
+
 
   loadSingletons: ( callback ) ->
     # Singletons

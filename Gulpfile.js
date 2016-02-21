@@ -259,6 +259,12 @@ conf.fileOrder = [
 
   'GpsRunView',
 
+  'CaseSearchRunView',
+  'CaseSelectRunView',
+
+  'TabletManagerView',
+
+
   'Result',
   'Results',
   'ResultView',
@@ -325,6 +331,9 @@ conf.fileOrder = [
   'Config',
 
   'Log',
+
+  'Case',
+  'Cases',
 
   'Settings',
   'SettingsView',
