@@ -106,12 +106,12 @@ Backbone.Model.prototype.stamp = ->
 # This series of functions returns properties with default values if no property is found
 # @gotcha be mindful of the default "blank" values set here
 #
-Backbone.Model.prototype.getNumber =        (key, fallback = 0)  -> return if @has(key) then parseInt(@get(key)) else fallback
-Backbone.Model.prototype.getArray =         (key, fallback = []) -> return if @has(key) then @get(key)           else fallback
-Backbone.Model.prototype.getString =        (key, fallback = '') -> return if @has(key) then @get(key)           else fallback
-Backbone.Model.prototype.getEscapedString = (key, fallback = '') -> return if @has(key) then @escape(key)        else fallback
-# this seems too important to use a default
-Backbone.Model.prototype.getBoolean =       (key) -> return if @has(key) then (@get(key) == true or @get(key) == 'true')
+Backbone.Model.prototype.getNumber        = (key, def) -> return if @has(key) then Number(@get(key)) else if def isnt undefined then def else 0
+Backbone.Model.prototype.getArray         = (key, def) -> return if @has(key) then @get(key)           else if def isnt undefined then def else []
+Backbone.Model.prototype.getString        = (key, def) -> return if @has(key) then @get(key)           else if def isnt undefined then def else ""
+Backbone.Model.prototype.getEscapedString = (key, def) -> return if @has(key) then @escape(key)        else if def isnt undefined then def else ""
+Backbone.Model.prototype.getBoolean       = (key, def) -> return if @has(key) then (@get(key) is true or @get(key) is 'true') else if def isnt undefined then def
+Backbone.Model.prototype.getObject        = (key, def) -> return if @has(key) then @get(key)           else if def isnt undefined then def else {}
 
 
 #
