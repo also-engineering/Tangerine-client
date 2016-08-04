@@ -44,9 +44,10 @@ class QuestionRunView extends Backbone.View
     @highlightPrevious()
 
   flashScreen: ->
-    $modal = $('#modal')
-    $modal.css('display', 'block')
-    setTimeout(( -> $modal.css('display', 'none')), @flashInterval )
+    window.requestAnimationFrame =>
+      $modal = $('#modal')
+      $modal.css('display', 'block')
+      setTimeout(( window.requestAnimationFrame => $modal.css('display', 'none') ), @flashInterval )
 
   highlightPrevious: ->
     # highlight previous answer if "highlight previous" option selected
@@ -56,13 +57,19 @@ class QuestionRunView extends Backbone.View
 
 
   stopTimers: ->
-    clearTimeout(@warningTimerId)  if @warningTimerId?
-    clearTimeout(@progressTimerId) if @progressTimerId?
+    if @warningTimerId?
+      @cancelWarningTimer = true
+      clearTimeout(@warningTimerId)
+    if @progressTimerId?
+      @cancelProgressTimer = true
+      clearTimeout(@progressTimerId)
 
   startWarningTimer: ->
     @warningTimerId = setTimeout(@checkWarningTimer.bind(@), QuestionRunView.TIMER_INTERVAL)
 
   checkWarningTimer: ->
+    return if @cancelWarningTimer is true
+
     elapsed = (new Date).getTime() - @displayTime
     if elapsed >= @warningTime
       @setMessage @model.get('warningMessage')
@@ -73,6 +80,8 @@ class QuestionRunView extends Backbone.View
     @progressTimerId = setTimeout(@checkProgressTimer.bind(@), QuestionRunView.TIMER_INTERVAL)
 
   checkProgressTimer: ->
+    return if @cancelProgressTimer is true
+
     elapsed = (new Date).getTime() - @displayTime
     if elapsed >= @timeLimit
       @forceProgress(elapsed)
@@ -80,8 +89,8 @@ class QuestionRunView extends Backbone.View
       @progressTimerId = setTimeout(@checkProgressTimer.bind(@), QuestionRunView.TIMER_INTERVAL)
 
   forceProgress: (elapsed) ->
-    clearTimeout(@progressTimerId) if @progressTimerId?
-    clearTimeout(@warningTimerId) if @warningTimerId?
+    @cancelProgressTimer = @progressTimerId?
+    @cancelWarningTimer = @warningTimerId?
 
     @forcedTime = elapsed
     @isValid = true
@@ -107,11 +116,11 @@ class QuestionRunView extends Backbone.View
       @highlightPrevious()
 
     # do not display warning after a click
-    clearTimeout(@warningTimerId) if @warningTimerId?
+    @cancelWarningTimer = @warningTimerId?
 
     if @isValid
       if @autoProgress
-        clearTimeout(@progressTimerId) if @progressTimerId?
+        @cancelProgressTimer = @progressTimerId?
         if @autoProgressImmediate
           @trigger 'av-next'
         else
@@ -411,10 +420,6 @@ class QuestionRunView extends Backbone.View
     css = width:'100%', height:'auto'
     css = width:'auto', height:'100%' if (ratio < pratio)
     $(img).parent().css(css)
-
-
-  setProgress: (current, total)->
-    @$el.find("#av-progress").html "#{current}/#{total}"
 
   defineSpecialCaseResults: ->
     list = ["missing", "notAsked", "skipped", "logicSkipped", "notAskedAutostop"]
