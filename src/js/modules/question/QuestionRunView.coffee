@@ -101,7 +101,11 @@ class QuestionRunView extends Backbone.View
 
   avButton: (e) ->
     time = (new Date).getTime() - @displayTime
-    $target = $(e.target).parent('button')
+    if e.target.nodeName == "IMG"
+      $target = $(e.target).parent('button')
+    else if e.target.nodeName == "BUTTON"
+      return
+      $target = $(e.target)
     value = $target.attr('data-value')
     return if value is '' # dont respond if there's no value
 
@@ -124,7 +128,10 @@ class QuestionRunView extends Backbone.View
         if @autoProgressImmediate
           @trigger 'av-next'
         else
-          setTimeout (=> @trigger 'av-next'), QuestionRunView.AUTO_PROGRESS_DELAY
+          delayTime = QuestionRunView.AUTO_PROGRESS_DELAY
+          if @model.getNumber('transitionDelay', delayTime) isnt QuestionRunView.AUTO_PROGRESS_DELAY
+            delayTime = @model.getNumber('transitionDelay')
+          setTimeout (=> @trigger 'av-next'), delayTime
 
       if @model.getString('transitionComment') isnt ''
         @setMessage(@model.getEscapedString('transitionComment'))
@@ -444,7 +451,7 @@ Object.defineProperty QuestionRunView, "EXIT_TIMER",
   value: 5e3 # 5 seconds
 
 Object.defineProperty QuestionRunView, "AUTO_PROGRESS_DELAY",
-  value: 5e3
+  value: 350
 
 Object.defineProperty QuestionRunView, "FLASH_INTERVAL",
   value: 100
