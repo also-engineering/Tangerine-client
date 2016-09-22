@@ -72,7 +72,7 @@ class QuestionRunView extends Backbone.View
 
     elapsed = (new Date).getTime() - @displayTime
     if elapsed >= @warningTime
-      @setMessage @model.get('warningMessage')
+      @setWarningMessage @model.get('warningMessage')
     else
       @warningTimerId = setTimeout(@checkWarningTimer.bind(@), QuestionRunView.TIMER_INTERVAL)
 
@@ -304,6 +304,9 @@ class QuestionRunView extends Backbone.View
   setMessage: (message) =>
     @$el.find(".error_message").html message
 
+  setWarningMessage: (message) =>
+    @$el.find(".av-warning-message").html message
+
   setProgress: (current, total)->
     @$el.find("#av-progress").html "#{current}/#{total}"
 
@@ -395,6 +398,7 @@ class QuestionRunView extends Backbone.View
 
     <div id='av-progress' class='av-light'></div>
     <div class='av-light av-prompt error_message'>#{@model.get('prompt')}</div>
+    <div class='av-light av-warning-message'></div>
     <div class='av-layout'>#{html}</div>
     "
 
