@@ -56,6 +56,12 @@ class QuestionRunView extends Backbone.View
       @$el.find(".av-button[data-value='#{previousValue}']").addClass('av-button-highlight')
 
 
+  highlightCurrent: ->
+    # highlight current answer
+    if @answer isnt ''
+      @$el.find(".av-button[data-value='#{@answer}']").addClass('av-button-highlight')
+
+
   stopTimers: ->
     if @warningTimerId?
       @cancelWarningTimer = true
@@ -101,23 +107,55 @@ class QuestionRunView extends Backbone.View
 
   avButton: (e) ->
     time = (new Date).getTime() - @displayTime
-    if e.target.nodeName == "IMG"
-      $target = $(e.target).parent('button')
-    else if e.target.nodeName == "BUTTON"
-      return
-      $target = $(e.target)
+    # Only respond to images, not the buttons
+    return if e.target.nodeName != "IMG"
+    
+    $target = $(e.target).parent('button')
+
     value = $target.attr('data-value')
     return if value is '' # dont respond if there's no value
 
     notAnsweredAlready = not @responseTime?
-    if notAnsweredAlready or @correctable
+
+    previousVariable = @model.getString('highlightPrevious')
+
+    if @correctable and previousVariable isnt ''
+
+      previousValue = ResultOfQuestion(previousVariable)
+
+      # click something new
+      if previousValue isnt value
+
+        # give the previous question a value first
+        if previousValue.indexOf('-deselected') != -1
+          SetResultOfQuestion(previousVariable, value, {responseTime:time})
+          @waitingForPrevious = false
+        else
+          @answer = value
+
+      # click something already selected
+      else if value is previousValue
+        # clicked previous selection
+        SetResultOfQuestion(previousVariable, "#{previousValue}-deselected")
+        @waitingForPrevious = true
+
+      else if value is @answer
+        # clicked current selection
+        @answer = ''
+        @responseTime = null
+
+        @waitingForPrevious = true
+
+
+    else if notAnsweredAlready or @correctable
       @responseTime = time
       @parent.audio.play() if @parent.audio?
       @answer = value
-      @updateValidity()
-      @$el.find('button.av-button-highlight').removeClass('av-button-highlight')
-      $target.addClass('av-button-highlight')
-      @highlightPrevious()
+
+    @updateValidity()
+    @$el.find('button.av-button-highlight').removeClass('av-button-highlight')
+    @highlightCurrent()
+    @highlightPrevious()
 
     # do not display warning after a click
     @cancelWarningTimer = @warningTimerId?
@@ -288,7 +326,8 @@ class QuestionRunView extends Backbone.View
               hasTime = @timeLimit isnt 0
               timeValid = (new Date).getTime - @displayTime >= @timeLimit
               notEmpty = @answer isnt ""
-              notEmpty or (hasTime and timeValid)
+              notWaiting = not @waitingForPrevious
+              notWaiting and (notEmpty or (hasTime and timeValid))
 
   setOptions: (options) =>
     @button.options = options
@@ -342,8 +381,10 @@ class QuestionRunView extends Backbone.View
       if @type == "open"
         if _.isString(@answer) && not _.isEmpty(@answer)
           answerValue = @answer
-        html += "<div><input id='#{@cid}_#{@name}' data-cid='#{@cid}' value='#{answerValue || ''}'></div>"
-
+        if @model.get("multiline")
+          html += "<div><textarea id='#{@cid}_#{@name}' data-cid='#{@cid}' value='#{answerValue || ''}'></textarea></div>"
+        else
+          html += "<div><input id='#{@cid}_#{@name}' data-cid='#{@cid}' value='#{answerValue || ''}'></div>"
       else if @type == "av"
         html += "<div class='av-question' id='container-#{@name}'></div>"
 
