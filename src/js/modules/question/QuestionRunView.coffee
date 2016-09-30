@@ -9,7 +9,7 @@ class QuestionRunView extends Backbone.View
     'click .autoscroll_icon' : 'scroll'
     'click .av-controls-exit' : 'avExit'
     'click .av-controls-next' : 'avNext'
-    'mousedown .av-button' : 'avButton'
+    'touchstart .av-button' : 'avButton'
 
   avExit: ->
     # reset the timer every time the button is pressed
@@ -113,7 +113,10 @@ class QuestionRunView extends Backbone.View
     $target = $(e.target).parent('button')
 
     value = $target.attr('data-value')
+
     return if value is '' # dont respond if there's no value
+
+
 
     notAnsweredAlready = not @responseTime?
 
@@ -123,34 +126,40 @@ class QuestionRunView extends Backbone.View
 
       previousValue = ResultOfQuestion(previousVariable)
 
-      # click something new
-      if previousValue isnt value
+    
+      if value is @answer
+        # clicked current selection
+        @answer = ''
+        @responseTime = null
 
+        @waitingForPrevious = true
+        @lastSelected = 'current'
+
+      else if previousValue isnt value
+        # click something new
         # give the previous question a value first
-        if previousValue.indexOf('-deselected') != -1
+        if previousValue.indexOf('-deselected') != -1 or @lastSelected is 'previous'
           SetResultOfQuestion(previousVariable, value, {responseTime:time})
           @waitingForPrevious = false
+          @lastSelected = 'previous'
         else
           @answer = value
+          @lastSelected = 'current'
 
       # click something already selected
       else if value is previousValue
         # clicked previous selection
         SetResultOfQuestion(previousVariable, "#{previousValue}-deselected")
         @waitingForPrevious = true
+        @lastSelected = 'previous'
 
-      else if value is @answer
-        # clicked current selection
-        @answer = ''
-        @responseTime = null
-
-        @waitingForPrevious = true
 
 
     else if notAnsweredAlready or @correctable
       @responseTime = time
       @parent.audio.play() if @parent.audio?
       @answer = value
+      @lastSelected = 'current'
 
     @updateValidity()
     @$el.find('button.av-button-highlight').removeClass('av-button-highlight')
@@ -179,6 +188,7 @@ class QuestionRunView extends Backbone.View
       return # do not trigger the answer event
 
     @trigger "answer", e, @model.get('order')
+
 
   avPrev: ->
     @trigger "av-prev"
