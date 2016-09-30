@@ -36,6 +36,23 @@ ResultOfGrid = (name) ->
   return vm.currentView.result.getItemResultCountByVariableName(name, "correct")
 
 
+SetPrevious = (name, value) ->
+  return vm.currentView.result.setVariable(name, value)
+
+SetResultOfQuestion = (name, value, obj) ->
+  index = vm.currentView.orderMap[vm.currentView.index]
+  notFound = true
+
+  for candidateView in vm.currentView.subtestViews[index].prototypeView.questionViews
+    if candidateView.model.get("name") == name
+      notFound = false
+      candidateView.answer = value
+      if obj?
+        candidateView[k] = v for k, v of obj
+  throw new ReferenceError("SetResultOfQuestion could not find variable #{name}") if notFound
+  
+
+
 #
 # Tangerine backbutton handler
 #
